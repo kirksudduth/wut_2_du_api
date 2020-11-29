@@ -8,6 +8,7 @@ class ToDo(models.Model):
     wut = models.CharField(max_length=300)
     timestamp = models.DateTimeField(auto_now_add=True)
     completed = models.BooleanField(default=False)
+    image = models.ImageField(null=True, blank=True, upload_to="images/")
 
     def __str__(self):
         return f'{self.doer} wants to {self.wut}'
