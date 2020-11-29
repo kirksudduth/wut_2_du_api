@@ -16,3 +16,16 @@ class ToDoSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ('id', 'doer', 'wut', 'timestamp', 'completed', 'image')
+
+
+class ToDos(ViewSet):
+
+    def retrieve(self, request, pk=None):
+        try:
+            todo = ToDo.objects.get(pk=pk)
+            serializer = ToDoSerializer(todo, context={'request': request})
+            return Response(serializer.data)
+        except Exception as ex:
+            return HttpResponseServerError(ex)
+
+    def create(self, )
