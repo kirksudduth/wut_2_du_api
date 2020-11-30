@@ -38,3 +38,12 @@ class ToDos(ViewSet):
         todo.save()
 
         return redirect('/')
+
+    def list(self, request):
+        todos = ToDo.objects.all()
+        serializer = ToDoSerializer(
+            todos,
+            many=True,
+            context={'request': request}
+        )
+        return Response(serializer.data)
