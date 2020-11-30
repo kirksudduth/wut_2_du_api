@@ -30,5 +30,11 @@ class ToDos(ViewSet):
             return HttpResponseServerError(ex)
 
     def create(self, request):
+        form_data = request.POST
         todo = ToDo()
         todo.doer = Doer.objects.get(user_id=request.user.id)
+        todo.task = form_data['task']
+        todo.image = form_data['url']
+        todo.save()
+
+        return redirect('/')
