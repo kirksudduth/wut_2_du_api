@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from frest_framework import status
 
-from w2dapi.models import ToDo
+from w2dapi.models import ToDo, Doer
 
 
 class ToDoSerializer(serializers.HyperlinkedModelSerializer):
@@ -12,10 +12,11 @@ class ToDoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ToDo
         url = serializers.HyperlinkedIdentityField(
-            view_name='todo',
+            view_name='todos',
             lookup_field='id'
         )
-        fields = ('id', 'doer', 'wut', 'timestamp', 'completed', 'image')
+        fields = ('id', 'url', 'doer', 'wut',
+                  'timestamp', 'completed', 'image')
 
 
 class ToDos(ViewSet):
@@ -28,4 +29,6 @@ class ToDos(ViewSet):
         except Exception as ex:
             return HttpResponseServerError(ex)
 
-    def create(self, )
+    def create(self, request):
+        todo = ToDo()
+        todo.doer = Doer.objects.get(user_id=request.user.id)
