@@ -2,7 +2,7 @@ from django.http import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
-from frest_framework import status
+from rest_framework import status
 
 from w2dapi.models import ToDo, Doer
 
@@ -15,8 +15,9 @@ class ToDoSerializer(serializers.HyperlinkedModelSerializer):
             view_name='todos',
             lookup_field='id'
         )
-        fields = ('id', 'url', 'doer', 'wut',
+        fields = ('id', 'url', 'doer', 'task',
                   'timestamp', 'completed', 'image')
+        depth = 2
 
 
 class ToDos(ViewSet):
@@ -40,7 +41,9 @@ class ToDos(ViewSet):
         return redirect('/')
 
     def list(self, request):
-        todos = ToDo.objects.all()
+        print("REQUEST", request.user)
+        doer = Doer.objects.get(id=request.user.id)
+        todos = ToDo.objects.filter(doer=doer)
         serializer = ToDoSerializer(
             todos,
             many=True,

@@ -5,7 +5,10 @@ from rest_framework.authtoken.views import obtain_auth_token
 from django.conf.urls.static import static
 from django.conf import settings
 
+from w2dapi.views import *
+
 router = routers.DefaultRouter(trailing_slash=False)
+router.register(r'todos', ToDos, 'todo')
 
 urlpatterns = [
     path('', include(router.urls)),
